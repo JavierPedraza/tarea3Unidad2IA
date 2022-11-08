@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.ConstrainedExecution;
 
 class Nodo
@@ -89,29 +90,45 @@ class Reinas
     {
         Random rnd = new Random();
         int rowInicial = rnd.Next(0, 7);
+        
         agregarReina(rowInicial,0);
+        
         rowOcupadas[rowInicial] = 1;
         colOcupadas[0] = 1;
-
-        for(int i = 0; i <= tamaño; i++)
-        {
-            for (int j = 0; j <= tamaño; j++)
-            {
-
-            }
-        }
     }
 
-    private bool isSafe(int row, int col)
+    private void findSafe()
     {
-        int i, j;
+        bool Agregado = false;
+        for(int i = 0; i < tamaño; i++)
+        {
+            if (rowOcupadas[i] == 1)
+                continue;
+            else
+            {
+                for(int j = 0; j < tamaño; j++)
+                {
+                    if (colOcupadas[j] == 1) continue;
+                    else
+                    {
+                        agregarReina(i, j);
+                        rowOcupadas[i] = 1;
+                        colOcupadas[j] = 1;
+                        Agregado = true;
+                        Console.WriteLine($"Reina agregada en {i} , {j}");
+                        break;
+                    }
+                }
+            }
+            if (Agregado == true) break;
+        }
 
     }
 
 
     void agregarReina(int row, int col)
     {
-        tablero[row, col] = 1;
+        this.tablero[row, col] = 1;
     }
 
 }
@@ -125,6 +142,8 @@ namespace Arboles
         static void Main(string[] args)
         {
             BuscadorNodo buscador = new BuscadorNodo();
+
+            
 
             Nodo raiz = new Nodo("raiz");
             //Populamos el primer nivel
