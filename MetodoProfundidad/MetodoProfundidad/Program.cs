@@ -86,49 +86,121 @@ class Reinas
 
     }
 
-    void resolverReinas()
+    public void resolverReinas()
     {
         Random rnd = new Random();
         int rowInicial = rnd.Next(0, 7);
         
         agregarReina(rowInicial,0);
-        
-        rowOcupadas[rowInicial] = 1;
-        colOcupadas[0] = 1;
+
+        for (int i = 0; i < (tamaño-1); i++)
+        {
+            findSafe();
+        }
+
     }
 
     private void findSafe()
     {
         bool Agregado = false;
-        for(int i = 0; i < tamaño; i++)
+        for(int i = 0; i < (tamaño - 1); i++)
         {
-            if (rowOcupadas[i] == 1)
-                continue;
+            //checa si la hilera actual ya tiene reina
+            if (rowOcupadas[i] == 1) continue;
             else
             {
-                for(int j = 0; j < tamaño; j++)
+                for(int j = 0; j < (tamaño - 1); j++)
                 {
+                //chequa si la columna actual ya tiene reina
                     if (colOcupadas[j] == 1) continue;
                     else
                     {
-                        agregarReina(i, j);
-                        rowOcupadas[i] = 1;
-                        colOcupadas[j] = 1;
-                        Agregado = true;
-                        Console.WriteLine($"Reina agregada en {i} , {j}");
-                        break;
+                        //checando las diagonales
+                        if (encontrarDiagIzSup(i, j) && 
+                            encontrarDiagDerSup(i,j) && 
+                            encontrarDiagIzInf(i,j) && 
+                            encontrarDiagDerInf(i,j)
+                            )
+                        {
+                            agregarReina(i, j);
+                            Agregado = true;
+                            break;
+                        }
                     }
                 }
             }
             if (Agregado == true) break;
         }
+    }
+    //Bools para checar diagonales
+    private bool encontrarDiagIzSup(int i, int j)
+    {
+        int diag1, diag2;
+        diag1 = i-1;
+        diag2 = j-1;
+        //checa diagonal izquierda superior
+        while (diag1 >= 0 && diag2 >= 0)
+        {
+            if (tablero[diag1, diag2] == 1) return false;
+            diag1--;
+            diag2--;
+        }
+        return true;
+    }
+    private bool encontrarDiagDerSup(int i, int j)
+    {
+        int diag1, diag2;
+        diag1 = i+1;
+        diag2 = j+1;
+        //checa diagonal derecha superior
+        while (diag1 < tamaño && diag2 < tamaño)
+        {
+            if (tablero[diag1, diag2] == 1) return false;
+            diag1++;
+            diag2++;
+        }
+        return true;
 
+    }
+    private bool encontrarDiagIzInf(int i, int j)
+    {
+        int diag1, diag2;
+        diag1 = i+1;
+        diag2 = j-1;
+
+        //checa diagonal izquierda inferior
+        while (diag1 < tamaño && diag2 >= 0)
+        {
+            if (tablero[diag1, diag2] == 1) return false;
+            diag1++;
+            diag2--;
+        }
+
+        return true;
+    }
+    private bool encontrarDiagDerInf(int i, int j)
+    {
+        int diag1, diag2;
+        diag1 = i-1;
+        diag2 = j+1;
+        //checa diagonal derecha inferior
+        while (diag1 >= 0 && diag2 < tamaño)
+        {
+            if (tablero[diag1 , diag2] == 1) return false;
+            diag1--;
+            diag2++;
+        }
+        return true;
     }
 
 
-    void agregarReina(int row, int col)
+
+        void agregarReina(int row, int col)
     {
         this.tablero[row, col] = 1;
+        this.rowOcupadas[row] = 1;
+        this.colOcupadas[col] = 1;
+        Console.WriteLine($"Reina agregada en {row} , {col}");
     }
 
 }
@@ -176,6 +248,8 @@ namespace Arboles
             Dictionary<int, Nodo> chessboard = new Dictionary<int, Nodo>();
 
             Reinas reinita = new Reinas();
+
+            reinita.resolverReinas();
 
         }
 
