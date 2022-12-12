@@ -97,7 +97,7 @@ class Reinas
         {
             findSafe();
         }
-
+        imprimirTablero();
     }
 
     private void findSafe()
@@ -193,7 +193,18 @@ class Reinas
         return true;
     }
 
-
+    private void imprimirTablero()
+    {
+        Console.WriteLine();
+        for (int i = 0; i < tamaño; i++)
+        {
+            for(int j = 0; j<tamaño; j++)
+            {
+                Console.Write($"{ tablero[i, j]}, ");
+            }
+            Console.WriteLine();
+        }
+    }
 
         void agregarReina(int row, int col)
     {
